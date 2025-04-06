@@ -1,5 +1,5 @@
 
-# 📌 "Ahorca/World"
+# 📌 "Juego del ahorcado"
 
 ## 🎮 Introducción
 
