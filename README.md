@@ -14,7 +14,7 @@ Implementacion de un juego del ahorcado en lenguaje Java, practicando el crear m
 - **Java** ☕
 - **Swing** 🖥️ para la interfaz gráfica
 - **Informacion** SQLite, archivos .txt
-- **Visual Studio** como editor
+- **IntelliJ** como editor
 
 ---
 
