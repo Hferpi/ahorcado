@@ -23,7 +23,7 @@ Bienvenidos a la presentación del desarrollo de "Ahorca/World", un juego del ah
 El diagrama E-R establece las relaciones entre los diferentes componentes del juego. A continuación, se explican las entidades principales:
 
 ![Esquema Profesor](images/erProyectoAhorcado.jpg)
-![Mi esquema](images/Diagrama optimizado.png)
+![Mi esquema](images/DiagramaOptimizado.png)
 
 
 
