@@ -1,5 +1,6 @@
 <div align="center">
     <img src="info/banner.png" alt="titulo">
+    <img src="info/dibujo.png" alt="muñeco">
 </div>
 <br>
 
