@@ -29,7 +29,7 @@ Implementacion de un juego del ahorcado en lenguaje Java, practicando el crear m
 Este diagrama ha sido proporcionado por el profesor:
 <br>
 ![Esquema Profesor](info/erProyectoAhorcado.jpg)
-<hr>
+<br>
 
 Este ha sido como voy a basar mi juego he eliminado hacer una tabla para idiomas simplemente sera un atributo, el historico lo he unido de forma que al acabar la partida se guarda directamente el resultado.
 <br>
@@ -137,12 +137,12 @@ CREATE TABLE Palabra_Partida (
 Mediante el uso de Maven, de moomento acepta registros y los guarda en la BBDD sentencia: 
 <br>
 ![Sentencia SQL](info/sentenciaUsuarios.png)
-<hr>
+<br>
 
 Enlazamos un archivo .txt con 200 palabras en Español de momento:
 <br>
 ![Enlacar archivo](info/rutaPalabras.png)
-<hr>
+<br>
 
 Ejemplo de las palabras:
 <br>
