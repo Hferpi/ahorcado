@@ -1,5 +1,6 @@
+<div align="center">
 ![Banner](info/banner.png)
-
+</div>
 
 # 📌 "Juego del ahorcado"
 
