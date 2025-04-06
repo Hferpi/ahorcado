@@ -112,7 +112,7 @@ CREATE TABLE Palabra_Partida (
 #  3.0 Conectar la base de datos con Java. 
 
 Mediante el uso de Maven, de moomento acepta registros y los guarda en la BBDD sentencia: 
-![Sentencia SQL](images/sentenciaUsuario.png)
+![Sentencia SQL](images/sentenciaUsuarios.png)
 
 Enlazamos un archivo con 200 palabras en Español de momento:
 ![Enlacar archivo](images/rutaPalabras.png)
