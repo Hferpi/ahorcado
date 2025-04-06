@@ -1,5 +1,5 @@
 <div align="center">
-![Banner](info/banner.png)
+    <img src="info/banner.png" alt="titulo">
 </div>
 
 # 📌 "Juego del ahorcado"
