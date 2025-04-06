@@ -20,23 +20,24 @@ Implementacion de un juego del ahorcado en lenguaje Java, practicando el crear m
 - **Informacion** SQLite, archivos .txt
 - **IntelliJ** como editor
 - 
-<br>
+
+
 ---
 
 ## 🗂️ 1.0 - Diagrama Entidad-Relación (E-R)
 
 Este diagrama ha sido proporcionado por el profesor:
-
-![Esquema Profesor](info/erProyectoAhorcado.jpg)
 <br>
+![Esquema Profesor](info/erProyectoAhorcado.jpg)
+<hr>
 
 Este ha sido como voy a basar mi juego he eliminado hacer una tabla para idiomas simplemente sera un atributo, el historico lo he unido de forma que al acabar la partida se guarda directamente el resultado.
-
+<br>
 ![Mi esquema](info/DiagramaOptimizado.png)
 
 
 
-<br>
+
 ---
 
 ## 📝 2.0 - BASE DE DATOS SQLite  
@@ -134,20 +135,21 @@ CREATE TABLE Palabra_Partida (
 #  3.0 Conectar la base de datos con Java. 
 
 Mediante el uso de Maven, de moomento acepta registros y los guarda en la BBDD sentencia: 
-![Sentencia SQL](info/sentenciaUsuarios.png)
 <br>
+![Sentencia SQL](info/sentenciaUsuarios.png)
+<hr>
 
 Enlazamos un archivo .txt con 200 palabras en Español de momento:
-![Enlacar archivo](info/rutaPalabras.png)
 <br>
+![Enlacar archivo](info/rutaPalabras.png)
+<hr>
 
 Ejemplo de las palabras:
-
+<br>
 ![Sentencia SQL](info/ejemploLista.png)
 
 
 
-<br>
 ---
 🎯 **Próximo paso:** 
 
