@@ -33,6 +33,7 @@ Este diagrama ha sido proporcionado por el profesor:
 
 Este ha sido como voy a basar mi juego he eliminado hacer una tabla para idiomas simplemente sera un atributo, el historico lo he unido de forma que al acabar la partida se guarda directamente el resultado.
 <br>
+
 ![Mi esquema](info/DiagramaOptimizado.png)
 
 
