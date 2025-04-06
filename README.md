@@ -13,143 +13,111 @@ Bienvenidos a la presentación del desarrollo de "Ahorca/World", un juego del ah
 ### 🔹 Tecnologías a Utilizar
 - **Java** ☕
 - **Swing** 🖥️ para la interfaz gráfica
-- **AUN POR DECIDIR** 🗄️ para la conexión con base de datos
-- **Visual Studio** 🏗️ para organizar el código
+- **AUN POR DECIDIR** SQLite
+- **Visual Studio** como editor
 
 ---
 
 ## 🗂️ 1.0 - Diagrama Entidad-Relación (E-R)
 
-El diagrama E-R establece las relaciones entre los diferentes componentes del juego. A continuación, se explican las entidades principales:
+Este diagrama ha sido proporcionado por el profesor:
 
 ![Esquema Profesor](images/erProyectoAhorcado.jpg)
+
+Este ha sido como voy a basar mi juego he eliminado hacer una tabla para idiomas simplemente sera un atributo, el historico lo he unido de forma que al acabar la partida se guarda directamente el resultado.
+
 ![Mi esquema](images/DiagramaOptimizado.png)
 
 
 
----
-
-| Entidad       | Atributos                                      | Relación                                                                 |
-|--------------|----------------------------------------------|------------------------------------------------------------------------|
-| **Jugador (JUGADOR)** | Nombre 📝,  Contraseña 🔑,  IDJugador 🆔,  IDAdmin 🛡️ (opcional) | Puede jugar varias partidas 🎲, obtener logros 🏆, aparecer en el ranking 📊 |
-| **Administrador (ADMIN)** | IDAdmin 🆔, Rango ⭐, IDJugador 🆔 | Solo los jugadores con la contraseña de admin pueden acceder al rango |
-| **Partida (PARTIDA)** | IDPartida 🆔, Resultado ✅❌, Puntuación 🎯, IDJugador 🆔, IDPalabra 🔤, IDJuego 🕹️ , IDnumJuego| Cada jugador puede participar en múltiples partidas; cada partida tiene una palabra asociada |
-| **Logros (LOGROS)** | IDLogro 🆔, IDJugador 🆔 | Cada jugador puede desbloquear varios logros |
-| **Ranking (RANKING)** | IDRanking 🆔, Rango 🏅, IDPartida 🆔 | Cada partida tiene una puntuación que influye en el ranking |
-| **Palabra (PALABRA)** | IDPalabra 🆔, Sinónimo 1 📝, Sinónimo 2 📝, IDDificultad 🔥 | Cada palabra tiene una dificultad asignada |
-| **Dificultad (DIFICULTAD)** | IDDificultad 🆔, Nivel 📶, Recompensa 🎁 | A mayor dificultad, mayor puntuación obtenida |
-| **Modo de Juego (MODOJUEGO)** | IDJuego 🆔, Dificultad 🔥 | Cada partida pertenece a un modo de juego determinado |
-
----
 
 
-## 📝 2.0 - BASE DE DATOS MySQL  
+
+## 📝 2.0 - BASE DE DATOS SQLite  
 
 
-La base de datos de *Ahorca/World* está diseñada para gestionar jugadores, partidas, logros y rankings de manera eficiente. A continuación, se presenta la estructura optimizada en SQL:  
+La base de datos del juego deberia verse algo tal que asi:
 
 
-📌 Creación de la base de datos
-```
-CREATE DATABASE AhorcaWorld;
-USE AhorcaWorld;
-```
-🎮 Tabla de Jugadores
-```
-CREATE TABLE Jugador (
-    IDJugador INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(50) NOT NULL,
-    Contraseña VARCHAR(255) NOT NULL,
-    IDAdmin INT DEFAULT NULL
+-- Crear tabla Usuario
+CREATE TABLE Usuario (
+    idUsuario INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    contraseña VARCHAR(100)
 );
-```
-🛡️ Tabla de Administradores
-```
-CREATE TABLE Admin (
-    IDAdmin INT PRIMARY KEY AUTO_INCREMENT,
-    Rango VARCHAR(20) NOT NULL,
-    IDJugador INT UNIQUE,
-    FOREIGN KEY (IDJugador) REFERENCES Jugador(IDJugador)
+
+-- Crear tabla Administrador
+CREATE TABLE Administrador (
+    idUsuario INT PRIMARY KEY,
+    tipo VARCHAR(50),
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
-```
-🎲 Tabla de Partidas
-```
+
+-- Crear tabla Historico
+CREATE TABLE Historico (
+    idHistorico INT PRIMARY KEY,
+    idPartida INT,
+    puntuacion INT
+);
+
+-- Crear tabla Partida
 CREATE TABLE Partida (
-    IDPartida INT PRIMARY KEY AUTO_INCREMENT,
-    Resultado ENUM('Ganado', 'Perdido') NOT NULL,
-    Puntuación INT NOT NULL,
-    IDJugador INT,
-    IDPalabra INT,
-    IDJuego INT,
-    IDnumJuego INT,
-    FOREIGN KEY (IDJugador) REFERENCES Jugador(IDJugador),
-    FOREIGN KEY (IDPalabra) REFERENCES Palabra(IDPalabra),
-    FOREIGN KEY (IDJuego) REFERENCES ModoJuego(IDJuego)
+    idPartida INT PRIMARY KEY,
+    idUsuario INT,
+    idHistorico INT,
+    fecha DATE,
+    palabra VARCHAR(100),
+    adivinada BOOLEAN,
+    idioma VARCHAR(50),
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (idHistorico) REFERENCES Historico(idHistorico)
 );
-```
- 🏆 Tabla de Logros
-```
-CREATE TABLE Logros (
-    IDLogro INT PRIMARY KEY AUTO_INCREMENT,
-    IDJugador INT,
-    FOREIGN KEY (IDJugador) REFERENCES Jugador(IDJugador)
+
+-- Crear tabla Jugador
+CREATE TABLE Jugador (
+    idUsuario INT PRIMARY KEY,
+    idPartida INT,
+    idHistorico INT,
+    ranking INT,
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
+    FOREIGN KEY (idPartida) REFERENCES Partida(idPartida),
+    FOREIGN KEY (idHistorico) REFERENCES Historico(idHistorico)
 );
-```
- 📊 Tabla de Ranking
-```
-CREATE TABLE Ranking (
-    IDRanking INT PRIMARY KEY AUTO_INCREMENT,
-    Rango VARCHAR(20) NOT NULL,
-    IDPartida INT,
-    FOREIGN KEY (IDPartida) REFERENCES Partida(IDPartida)
-);
-```
- 🔤 Tabla de Palabras
-```
+
+-- Crear tabla Palabra
 CREATE TABLE Palabra (
-    IDPalabra INT PRIMARY KEY AUTO_INCREMENT,
-    Palabra VARCHAR(50) NOT NULL,
-    Sinonimo1 VARCHAR(50),
-    Sinonimo2 VARCHAR(50),
-    IDDificultad INT,
-    FOREIGN KEY (IDDificultad) REFERENCES Dificultad(IDDificultad)
+    idPalabra INT PRIMARY KEY,
+    idPartida INT,
+    descripcion TEXT,
+    nombre VARCHAR(100),
+    FOREIGN KEY (idPartida) REFERENCES Partida(idPartida)
 );
-```
-🔥 Tabla de Dificultad
-```
-CREATE TABLE Dificultad (
-    IDDificultad INT PRIMARY KEY AUTO_INCREMENT,
-    Nivel VARCHAR(10) NOT NULL,
-    Recompensa INT NOT NULL
+
+-- Añadir clave foránea a Historico para la relación con Partida
+ALTER TABLE Historico
+ADD CONSTRAINT FK_Historico_Partida
+FOREIGN KEY (idPartida) REFERENCES Partida(idPartida);
+
+-- Añadir tabla de relación para la relación muchos a muchos entre Palabra y Partida
+CREATE TABLE Palabra_Partida (
+    idPalabra INT,
+    idPartida INT,
+    PRIMARY KEY (idPalabra, idPartida),
+    FOREIGN KEY (idPalabra) REFERENCES Palabra(idPalabra),
+    FOREIGN KEY (idPartida) REFERENCES Partida(idPartida)
 );
-```
- 🕹️ Tabla de Modo de Juego
-```
-CREATE TABLE ModoJuego (
-    IDJuego INT PRIMARY KEY AUTO_INCREMENT,
-    Nombre VARCHAR(50) NOT NULL,
-    IDDificultad INT,
-    FOREIGN KEY (IDDificultad) REFERENCES Dificultad(IDDificultad)
-);
-```
-✅ **Base de Datos Lista**
 
 ---
 
 #  3.0 Conectar la base de datos con Java. 
 
-El juego tiene ACTUALMENTE las siguientes características:
+Mediante el uso de Maven, de moomento acepta registros y los guarda en la BBDD sentencia: 
+![Sentencia SQL](images/sentenciaUsuario.jpg)
 
-- **Palabra aleatoria:** La palabra a adivinar se selecciona aleatoriamente 
-- **Interfaz gráfica:** Utiliza `JFrame` y `JPanel` para mostrar diferentes componentes como etiquetas (`JLabel`), campos de texto (`JTextField`), y botones (`JButton`).
-- **Imagen dinámica del ahorcado:** El muñeco ahorcado cambia con cada intento fallido, a sido creado y diseñado por mi mismo.
-- **Ingreso de letras:** El jugador puede ingresar letras para intentar adivinar la palabra.
-- **Letras usadas:** Se muestran las letras que el jugador ya ha intentado.
+
+
+
   
-
-![image](https://github.com/user-attachments/assets/862f6a6c-45aa-4da0-b6e4-c362cf6f7d6e)
-
-![image](https://github.com/user-attachments/assets/58807f93-5df1-4869-b6ac-e48d2645ef39)
 
 
 
