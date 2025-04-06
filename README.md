@@ -3,7 +3,7 @@
 
 ## 🎮 Introducción
 
-Bienvenidos a la presentación del desarrollo de "Ahorca/World", un juego del ahorcado basada en mi propio diagrama entidad-relación. En esta presentación, se detalla cada uno de los componentes del sistema y su implementación en código Java con interfaz.
+Implementacion de un juego del ahorcado en lenguaje Java, practicando el crear metodos, objetos en verias clases impiortando archivos de txt con palabras e implementacion de una base de datos para gestionar usuarios con un ranking y puntuacion.
 
 ---
 
@@ -13,7 +13,7 @@ Bienvenidos a la presentación del desarrollo de "Ahorca/World", un juego del ah
 ### 🔹 Tecnologías a Utilizar
 - **Java** ☕
 - **Swing** 🖥️ para la interfaz gráfica
-- **AUN POR DECIDIR** SQLite
+- **Informacion** SQLite, archivos .txt
 - **Visual Studio** como editor
 
 ---
@@ -130,7 +130,7 @@ CREATE TABLE Palabra_Partida (
 Mediante el uso de Maven, de moomento acepta registros y los guarda en la BBDD sentencia: 
 ![Sentencia SQL](images/sentenciaUsuarios.png)
 
-Enlazamos un archivo con 200 palabras en Español de momento:
+Enlazamos un archivo .txt con 200 palabras en Español de momento:
 ![Enlacar archivo](images/rutaPalabras.png)
 
 Ejemplo de las palabras:
