@@ -1,3 +1,5 @@
+![Banner](info/banner.png)
+
 
 # 📌 "Juego del ahorcado"
 
