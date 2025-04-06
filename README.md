@@ -40,27 +40,34 @@ La base de datos del juego deberia verse algo tal que asi:
 
 
 -- Crear tabla Usuario
+```
 CREATE TABLE Usuario (
     idUsuario INT PRIMARY KEY,
     nombre VARCHAR(100),
     contraseña VARCHAR(100)
 );
+```
 
 -- Crear tabla Administrador
+```
 CREATE TABLE Administrador (
     idUsuario INT PRIMARY KEY,
     tipo VARCHAR(50),
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
+```
 
 -- Crear tabla Historico
+```
 CREATE TABLE Historico (
     idHistorico INT PRIMARY KEY,
     idPartida INT,
     puntuacion INT
 );
+```
 
 -- Crear tabla Partida
+```
 CREATE TABLE Partida (
     idPartida INT PRIMARY KEY,
     idUsuario INT,
@@ -72,8 +79,10 @@ CREATE TABLE Partida (
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario),
     FOREIGN KEY (idHistorico) REFERENCES Historico(idHistorico)
 );
+```
 
 -- Crear tabla Jugador
+```
 CREATE TABLE Jugador (
     idUsuario INT PRIMARY KEY,
     idPartida INT,
@@ -83,8 +92,10 @@ CREATE TABLE Jugador (
     FOREIGN KEY (idPartida) REFERENCES Partida(idPartida),
     FOREIGN KEY (idHistorico) REFERENCES Historico(idHistorico)
 );
+```
 
 -- Crear tabla Palabra
+```
 CREATE TABLE Palabra (
     idPalabra INT PRIMARY KEY,
     idPartida INT,
@@ -92,13 +103,17 @@ CREATE TABLE Palabra (
     nombre VARCHAR(100),
     FOREIGN KEY (idPartida) REFERENCES Partida(idPartida)
 );
+```
 
 -- Añadir clave foránea a Historico para la relación con Partida
+```
 ALTER TABLE Historico
 ADD CONSTRAINT FK_Historico_Partida
 FOREIGN KEY (idPartida) REFERENCES Partida(idPartida);
+```
 
 -- Añadir tabla de relación para la relación muchos a muchos entre Palabra y Partida
+```
 CREATE TABLE Palabra_Partida (
     idPalabra INT,
     idPartida INT,
@@ -106,6 +121,7 @@ CREATE TABLE Palabra_Partida (
     FOREIGN KEY (idPalabra) REFERENCES Palabra(idPalabra),
     FOREIGN KEY (idPartida) REFERENCES Partida(idPartida)
 );
+```
 
 ---
 
@@ -118,18 +134,13 @@ Enlazamos un archivo con 200 palabras en Español de momento:
 ![Enlacar archivo](images/rutaPalabras.png)
 
 Ejemplo de las palabras:
+
 ![Sentencia SQL](images/ejemploLista.png)
 
 
 
 
-  
+🎯 **Próximo paso:** 
 
+Ranking (historico), implementacion mostrar letras usadas, mejoras visuales, añadir idiomas, añadir administraador con roles especiales.
 
-
-
-
-🎯 **Próximo paso:** Crear el resto de niveles. 
-
-
-¡Os mantendre informados! 💻🔥
