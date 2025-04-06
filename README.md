@@ -139,7 +139,7 @@ Ejemplo de las palabras:
 
 
 
-
+---
 🎯 **Próximo paso:** 
 
 Ranking (historico), implementacion mostrar letras usadas, mejoras visuales, añadir idiomas, añadir administraador con roles especiales.
