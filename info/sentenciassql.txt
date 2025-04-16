@@ -1,0 +1,32 @@
+ 
+create table usuario(
+idUsuario int primary key  auto_increment,
+nombre varchar (20) not null,
+apellido varchar (20),
+contraseña varchar (20) not null);
+
+
+create table Administrador(
+idUsuario int foraing key,
+nivel enum (1,2,3));
+
+create table Jugador(
+id_Usuario int foraing key,
+)
+
+create table Cuota(
+idCuota int primary key auto_increment
+);
+
+create table PalabraFrases(
+idPalabra primary key,
+nombre varchar(20),
+descripcion tinytext,
+i
+idioma enum('español', 'inlges', 'valenciano', 'frances')
+);
+
+create table PalabrasIdioma(
+idIdioma primary key,
+
+);
