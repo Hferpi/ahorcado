@@ -226,7 +226,8 @@ public class PantallaJuego extends JFrame {
         logica.nuevaPartida();
         dibujoAhorcado.resetear();
         letrasUsadas.clear();
-        actualizarLetrasUsadas();
+        letrasUsadasNoEstan.clear();
+        letrasUsadasLabel.setText("");
         palabraLabel.setText(logica.getPalabraActual());
         mensajeLabel.setText("¡Nueva partida! Adivina la palabra.");
         inputLetra.requestFocus();

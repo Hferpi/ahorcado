@@ -9,23 +9,33 @@ import java.util.Map;
 
 
 public class BaseDatos {
-    private static final String DB_URL = "jdbc:sqlite:ahorcado.db";
+    // Configuración para MySQL - URL corregida
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/AhorcadoMySQL";
+    private static final String USER = "root";
+    private static final String PASSWORD = "abcd1234";
 
     public static void inicializarBD() {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement()) {
+        try {
+            // Cargar explícitamente el driver de MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // Create users table if it doesn't exist
-            String sql = "CREATE TABLE IF NOT EXISTS usuarios (" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "nombre TEXT NOT NULL UNIQUE," +
-                    "contrasena TEXT NOT NULL," +
-                    "puntuacion INTEGER DEFAULT 0," +
-                    "fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 Statement stmt = conn.createStatement()) {
 
-            stmt.execute(sql);
-            System.out.println("Base de datos inicializada correctamente");
+                // Create users table if it doesn't exist - MySQL syntax
+                String sql = "CREATE TABLE IF NOT EXISTS usuarios (" +
+                        "id INT AUTO_INCREMENT PRIMARY KEY," +
+                        "nombre VARCHAR(50) NOT NULL UNIQUE," +
+                        "contrasena VARCHAR(100) NOT NULL," +
+                        "puntuacion INT DEFAULT 0," +
+                        "fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 
+                stmt.execute(sql);
+                System.out.println("Base de datos inicializada correctamente");
+            }
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
+            e.printStackTrace();
         } catch (SQLException e) {
             System.err.println("Error al inicializar la base de datos: " + e.getMessage());
             e.printStackTrace();
@@ -41,15 +51,22 @@ public class BaseDatos {
 
         String sql = "INSERT INTO usuarios (nombre, contrasena) VALUES (?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            // Cargar explícitamente el driver de MySQL
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            pstmt.setString(1, nombre);
-            pstmt.setString(2, contrasena); // Nota: en una aplicación real, deberías encriptar la contraseña
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            int filasAfectadas = pstmt.executeUpdate();
-            return filasAfectadas > 0;
+                pstmt.setString(1, nombre);
+                pstmt.setString(2, contrasena); // Nota: en una aplicación real, deberías encriptar la contraseña
 
+                int filasAfectadas = pstmt.executeUpdate();
+                return filasAfectadas > 0;
+            }
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
+            return false;
         } catch (SQLException e) {
             System.err.println("Error al registrar usuario: " + e.getMessage());
             return false;
@@ -60,20 +77,26 @@ public class BaseDatos {
     public static boolean verificarLogin(String nombre, String contrasena) {
         String sql = "SELECT contrasena FROM usuarios WHERE nombre = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            pstmt.setString(1, nombre);
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    String contrasenaAlmacenada = rs.getString("contrasena");
-                    return contrasenaAlmacenada.equals(contrasena);
+                pstmt.setString(1, nombre);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        String contrasenaAlmacenada = rs.getString("contrasena");
+                        return contrasenaAlmacenada.equals(contrasena);
+                    }
                 }
+
+                return false;
             }
-
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
             return false;
-
         } catch (SQLException e) {
             System.err.println("Error al verificar login: " + e.getMessage());
             return false;
@@ -84,15 +107,21 @@ public class BaseDatos {
     public static boolean existeUsuario(String nombre) {
         String sql = "SELECT nombre FROM usuarios WHERE nombre = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            pstmt.setString(1, nombre);
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next();
+                pstmt.setString(1, nombre);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    return rs.next();
+                }
             }
-
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
+            return false;
         } catch (SQLException e) {
             System.err.println("Error al comprobar usuario: " + e.getMessage());
             return false;
@@ -103,15 +132,21 @@ public class BaseDatos {
     public static boolean actualizarPuntuacion(String nombre, int puntos) {
         String sql = "UPDATE usuarios SET puntuacion = puntuacion + ? WHERE nombre = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            pstmt.setInt(1, puntos);
-            pstmt.setString(2, nombre);
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            int filasAfectadas = pstmt.executeUpdate();
-            return filasAfectadas > 0;
+                pstmt.setInt(1, puntos);
+                pstmt.setString(2, nombre);
 
+                int filasAfectadas = pstmt.executeUpdate();
+                return filasAfectadas > 0;
+            }
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
+            return false;
         } catch (SQLException e) {
             System.err.println("Error al actualizar puntuación: " + e.getMessage());
             return false;
@@ -122,19 +157,25 @@ public class BaseDatos {
     public static int obtenerPuntuacion(String nombre) {
         String sql = "SELECT puntuacion FROM usuarios WHERE nombre = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            pstmt.setString(1, nombre);
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("puntuacion");
+                pstmt.setString(1, nombre);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getInt("puntuacion");
+                    }
                 }
+
+                return 0;
             }
-
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
             return 0;
-
         } catch (SQLException e) {
             System.err.println("Error al obtener puntuación: " + e.getMessage());
             return 0;
@@ -145,18 +186,23 @@ public class BaseDatos {
         String sql = "SELECT nombre, puntuacion, fecha_registro FROM usuarios ORDER BY puntuacion DESC";
         List<Map<String, Object>> ranking = new ArrayList<>();
 
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            while (rs.next()) {
-                Map<String, Object> jugador = new HashMap<>();
-                jugador.put("nombre", rs.getString("nombre"));
-                jugador.put("puntuacion", rs.getInt("puntuacion"));
-                jugador.put("fecha_registro", rs.getString("fecha_registro"));
-                ranking.add(jugador);
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+
+                while (rs.next()) {
+                    Map<String, Object> jugador = new HashMap<>();
+                    jugador.put("nombre", rs.getString("nombre"));
+                    jugador.put("puntuacion", rs.getInt("puntuacion"));
+                    jugador.put("fecha_registro", rs.getString("fecha_registro"));
+                    ranking.add(jugador);
+                }
             }
-
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
         } catch (SQLException e) {
             System.err.println("Error al obtener ranking: " + e.getMessage());
         }
@@ -168,22 +214,26 @@ public class BaseDatos {
     public static String obtenerContrasena(String nombre) {
         String sql = "SELECT contrasena FROM usuarios WHERE nombre = ?";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            pstmt.setString(1, nombre);
+            try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("contrasena");
+                pstmt.setString(1, nombre);
+
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("contrasena");
+                    }
                 }
             }
-
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: Driver MySQL no encontrado: " + e.getMessage());
         } catch (SQLException e) {
             System.err.println("Error al recuperar contraseña: " + e.getMessage());
         }
 
         return null;
     }
-
 }
